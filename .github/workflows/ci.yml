@@ -3,7 +3,7 @@ name: qa
 on: # 실행 조건 설정
   push:
     branches:
-      - "staging/**/*" # 와일드카드 패턴
+      - "staging/**" # 와일드카드 패턴
 
 jobs: # 작업 내용 명시
   qa:
