@@ -1,4 +1,4 @@
-name: qa
+name: what
 
 on: # 실행 조건 설정
   push:
@@ -6,19 +6,11 @@ on: # 실행 조건 설정
       - "staging/**" # 와일드카드 패턴
 
 jobs: # 작업 내용 명시
-  qa:
+  what:
     name: Install and build
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./app/native
 
     steps:
-      # - name: Check for EXPO_TOKEN
-      #   run: |
-      #     if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-      #       echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
-      #       exit 1
-      #     fi
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -28,46 +20,35 @@ jobs: # 작업 내용 명시
           node-version: 18.x
           cache: npm
 
-      # - name: Setup Expo and EAS
-      #   uses: expo/expo-github-action@v8
-      #   with:
-      #     eas-version: latest
-      #     token: ${{ secrets.EXPO_TOKEN }}
-
       - name: Install dependencies
         run: npm ci
 
       - name: Check lint
         run: npm run lint
+  native:
+    name: native
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./app/native
 
-      # - name: Build # diff 체크해서 ota할때 submit할지
-      #   run: eas build --platform all --non-interactive --no-wait
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
 
-      # - name: Submit # diff 체크해서 ota할때 submit할지
-      #   run: eas submit --platform all
-# jobs:
-#   install:
-#     runs-on: ubuntu-latest
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-#     steps:
-#       - name: Checkout repository
-#       - uses: actions/checkout@v4
-#       - name: Setup Node
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 18.x
-#           cache: npm
+      - name: Build
+        run: eas build --platform all --profile preview
+        working-directory: ${{ env.working-directory }}
 
-#       - name: Install Dependencies
-#         run: npm install
-
-#   # Vercel로 웹 프로젝트 배포
-#   deploy_web:
-#     runs-on: ubuntu-latest
-#     needs: install  # install 단계가 완료된 후 실행
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Deploy Web to Vercel
-#         run: vercel --prod
-#         env:
-#           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      # - name: Submit
+      #   run: eas submit --platform all --profile preview
+      #   working-directory: ${{ env.working-directory }}
