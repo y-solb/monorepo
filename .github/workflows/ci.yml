@@ -31,6 +31,7 @@ jobs: # 작업 내용 명시
     env:
       working-directory: app/native
 
+
     steps:
       - name: Check for EXPO_TOKEN
         run: |
