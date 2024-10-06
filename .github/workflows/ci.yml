@@ -41,7 +41,7 @@ jobs: # 작업 내용 명시
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./app/native
+        working-directory: ./apps/native
 
       - name: Check for EXPO_TOKEN
         run: |
@@ -58,7 +58,7 @@ jobs: # 작업 내용 명시
 
       - name: Build
         run: eas build --platform android --profile preview
-        working-directory: ./app/native
+        working-directory: ./apps/native
 
       # - name: Submit
       #   run: eas submit --platform all --profile preview
