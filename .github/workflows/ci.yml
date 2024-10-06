@@ -1,4 +1,4 @@
-name: something
+name: preview
 
 on: # 실행 조건 설정
   push:
@@ -28,6 +28,9 @@ jobs: # 작업 내용 명시
   native:
     name: native
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Check for EXPO_TOKEN
