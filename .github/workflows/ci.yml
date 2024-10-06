@@ -28,8 +28,6 @@ jobs: # 작업 내용 명시
   native:
     name: native
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./app/native
 
     steps:
       - name: Checkout repository
@@ -43,7 +41,7 @@ jobs: # 작업 내용 명시
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ${{ env.working-directory }}
+        working-directory: ./app/native
 
       - name: Check for EXPO_TOKEN
         run: |
@@ -60,7 +58,7 @@ jobs: # 작업 내용 명시
 
       - name: Build
         run: eas build --platform android --profile preview
-        working-directory: ${{ env.working-directory }}
+        working-directory: ./app/native
 
       # - name: Submit
       #   run: eas submit --platform all --profile preview
