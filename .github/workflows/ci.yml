@@ -1,4 +1,4 @@
-name: what
+name: something
 
 on: # 실행 조건 설정
   push:
@@ -6,7 +6,7 @@ on: # 실행 조건 설정
       - "staging/**" # 와일드카드 패턴
 
 jobs: # 작업 내용 명시
-  what:
+  something:
     name: Install and build
     runs-on: ubuntu-latest
 
@@ -32,7 +32,20 @@ jobs: # 작업 내용 명시
       working-directory: ./app/native
 
     steps:
-      - name: Check for ㅋ
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ${{ env.working-directory }}
+
+      - name: Check for EXPO_TOKEN
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
             echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
