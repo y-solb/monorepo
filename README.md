@@ -1,7 +1,7 @@
 # Turborepo starter
 
-This is an official starter Turborepo.
-test!!!
+안녕하세요!
+
 
 ## Using this example
 
